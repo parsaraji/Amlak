@@ -1,0 +1,167 @@
+/* admin.css
+   Custom styling for ZaminYab theme admin area, metaboxes, and documentation panel.
+*/
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Apply Shabnam to custom panels when RTL is enabled */
+.toplevel_page_zaminyab_settings,
+.zaminyab-admin-wrap,
+#zaminyab-meta-box {
+    font-family: 'Shabnam', sans-serif !important;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Documentation Panel & Theme Options Styling */
+.zaminyab-admin-header {
+    background: #0f766e;
+    color: #fff;
+    padding: 24px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.zaminyab-admin-header h1 {
+    color: #fff;
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Shabnam', sans-serif !important;
+}
+
+.zaminyab-admin-container {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-top: none;
+    padding: 24px;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    gap: 24px;
+}
+
+.zaminyab-admin-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    border-left: 1px solid #ccd0d4;
+    padding-left: 20px;
+}
+
+.zaminyab-admin-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.zaminyab-admin-menu li a {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #1c1917;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.zaminyab-admin-menu li.active a,
+.zaminyab-admin-menu li a:hover {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+.zaminyab-admin-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.zaminyab-tab-content {
+    display: none;
+}
+
+.zaminyab-tab-content.active {
+    display: block;
+}
+
+/* Settings Form elements */
+.zaminyab-field-group {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f5f5f4;
+    padding-bottom: 24px;
+}
+
+.zaminyab-field-group:last-child {
+    border-bottom: none;
+}
+
+.zaminyab-field-label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #1c1917;
+}
+
+.zaminyab-field-desc {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Custom Warning Box */
+.zaminyab-warning-box {
+    background-color: #fffbeb;
+    border-right: 4px solid #d97706;
+    padding: 12px 16px;
+    border-radius: 4px;
+    color: #b45309;
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Meta boxes styling */
+.zaminyab-metabox-row {
+    margin-bottom: 16px;
+}
+.zaminyab-metabox-row label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+.zaminyab-metabox-row input[type="text"],
+.zaminyab-metabox-row select,
+.zaminyab-metabox-row textarea {
+    width: 100%;
+    max-width: 500px;
+}
+.zaminyab-metabox-checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}

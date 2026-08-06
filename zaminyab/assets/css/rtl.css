@@ -1,0 +1,10 @@
+/* rtl.css
+   This file is loaded in WordPress when an RTL language is activated.
+   Since our main.css is already written mobile-first and RTL-first,
+   this file can hold overrides or specific adjustments for third-party scripts.
+*/
+
+body {
+    direction: rtl;
+    unicode-bidi: embed;
+}

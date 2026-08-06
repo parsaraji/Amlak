@@ -1,0 +1,117 @@
+/* login.css
+   Custom CSS to beautifully style the WordPress Login screen in Persian RTL.
+*/
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Shabnam';
+    src: url('../fonts/Shabnam-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body.login {
+    background-color: #fafaf9 !important;
+    font-family: 'Shabnam', sans-serif !important;
+    direction: rlt !important;
+}
+
+#login {
+    padding: 8% 0 0;
+    width: 360px;
+}
+
+#login h1 a {
+    background-size: contain;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+body.login form {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #e7e5e4 !important;
+    background-color: #ffffff !important;
+    padding: 26px 24px 34px !important;
+}
+
+body.login label {
+    font-size: 14px;
+    color: #1c1917 !important;
+    font-weight: bold;
+}
+
+body.login input[type="text"],
+body.login input[type="password"],
+body.login input[type="checkbox"] {
+    font-family: 'Shabnam', sans-serif !important;
+    border-radius: 6px !important;
+    border: 1px solid #e7e5e4 !important;
+    padding: 8px 12px !important;
+    box-shadow: none !important;
+}
+
+body.login input[type="text"]:focus,
+body.login input[type="password"]:focus {
+    border-color: #0d9488 !important;
+    box-shadow: 0 0 0 1px #0d9488 !important;
+}
+
+body.login .wp-submit input[type="submit"] {
+    background-color: #0d9488 !important;
+    border-color: #0d9488 !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    font-family: 'Shabnam', sans-serif !important;
+    border-radius: 6px !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    padding: 6px !important;
+    height: auto !important;
+    font-size: 15px !important;
+    transition: background-color 0.2s ease;
+}
+
+body.login .wp-submit input[type="submit"]:hover {
+    background-color: #0f766e !important;
+}
+
+body.login #nav,
+body.login #backtoblog {
+    text-align: center !important;
+    font-size: 13px;
+}
+
+body.login #nav a,
+body.login #backtoblog a {
+    color: #78716c !important;
+}
+
+body.login #nav a:hover,
+body.login #backtoblog a:hover {
+    color: #0d9488 !important;
+}
+
+/* RTL Specific adjusts */
+body.login .forgetmenot {
+    float: right !important;
+}
+
+body.login .submit {
+    float: left !important;
+}
