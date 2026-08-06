@@ -1,6 +1,6 @@
 <?php
 /**
- * ZaminYab setup functions
+ * ZaminYab setup functions and programmatic page installer
  *
  * @package ZaminYab
  */
@@ -25,6 +25,9 @@ if ( ! function_exists( 'zaminyab_setup' ) ) {
 
         // Set default post thumbnail size.
         set_post_thumbnail_size( 360, 240, true );
+
+        // Define square crop image size (Center-cropped square images)
+        add_image_size( 'zaminyab-square', 600, 600, array( 'center', 'center' ) );
 
         // Add support for custom logo.
         add_theme_support( 'custom-logo', array(
@@ -56,6 +59,74 @@ if ( ! function_exists( 'zaminyab_setup' ) ) {
     }
 }
 add_action( 'after_setup_theme', 'zaminyab_setup' );
+
+/**
+ * Programmatically create essential directory pages on theme activation.
+ */
+function zaminyab_create_essential_pages() {
+    $pages = array(
+        'submit-listing' => array(
+            'title'     => 'ثبت آگهی فروش زمین',
+            'content'   => '[zaminyab_submit_listing]',
+            'template'  => 'templates/page-submit-listing.php',
+        ),
+        'dashboard' => array(
+            'title'     => 'داشبورد آگهی‌های من',
+            'content'   => '[zaminyab_user_dashboard]',
+            'template'  => 'templates/page-dashboard.php',
+        ),
+        'favorites' => array(
+            'title'     => 'علاقه‌مندی‌ها',
+            'content'   => '[zaminyab_favorites]',
+            'template'  => 'templates/page-favorites.php',
+        ),
+        'map-search' => array(
+            'title'     => 'جستجو روی نقشه',
+            'content'   => '[zaminyab_map_search]',
+            'template'  => 'templates/page-map-search.php',
+        ),
+        'contact' => array(
+            'title'     => 'تماس با ما',
+            'content'   => '',
+            'template'  => 'templates/page-contact.php',
+        ),
+        'about' => array(
+            'title'     => 'درباره ما',
+            'content'   => '',
+            'template'  => 'templates/page-about.php',
+        ),
+        'rules' => array(
+            'title'     => 'قوانین ثبت آگهی',
+            'content'   => '',
+            'template'  => 'templates/page-rules.php',
+        ),
+        'help' => array(
+            'title'     => 'راهنما',
+            'content'   => '',
+            'template'  => 'templates/page-help.php',
+        ),
+    );
+
+    foreach ( $pages as $slug => $page_data ) {
+        // Check if page already exists
+        $check_page = get_page_by_path( $slug );
+        if ( ! $check_page ) {
+            $page_id = wp_insert_post( array(
+                'post_title'    => $page_data['title'],
+                'post_content'  => $page_data['content'],
+                'post_status'   => 'publish',
+                'post_type'     => 'page',
+                'post_name'     => $slug,
+            ) );
+
+            if ( $page_id && ! is_wp_error( $page_id ) && ! empty( $page_data['template'] ) ) {
+                update_post_meta( $page_id, '_wp_page_template', $page_data['template'] );
+            }
+        }
+    }
+}
+add_action( 'after_switch_theme', 'zaminyab_create_essential_pages' );
+add_action( 'init', 'zaminyab_create_essential_pages', 90 );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.

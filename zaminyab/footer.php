@@ -51,10 +51,27 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <p style="color: #a8a29e; font-size: 13px; margin-bottom: 8px;">
                     آدرس دفتر: <?php echo esc_html( zaminyab_get_option( 'contact_address', 'ثبت نشده' ) ); ?>
                 </p>
-                <div style="display:flex; gap: 8px; margin-top: 12px;">
+
+                <!-- Expanded Social Links in Footer -->
+                <div style="display:flex; flex-wrap:wrap; gap: 8px; margin-top: 12px;">
                     <?php if ( zaminyab_get_option( 'whatsapp_number' ) ) : ?>
-                        <a href="https://wa.me/<?php echo esc_attr( zaminyab_get_option( 'whatsapp_number' ) ); ?>" style="color:#fff;" aria-label="WhatsApp">
-                            <?php echo zaminyab_get_svg_icon( 'whatsapp' ); ?>
+                        <a href="https://wa.me/<?php echo esc_attr( zaminyab_get_option( 'whatsapp_number' ) ); ?>" class="btn-outline" style="padding: 4px 8px; font-size: 11px; height: 28px; line-height: 20px; display: inline-flex; align-items: center; gap: 4px; color: #15803d; border-color: #15803d;">
+                            <?php echo zaminyab_get_svg_icon( 'whatsapp' ); ?> واتس‌اپ
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( zaminyab_get_option( 'bale_link' ) ) : ?>
+                        <a href="<?php echo esc_url( zaminyab_get_option( 'bale_link' ) ); ?>" class="btn-outline" style="padding: 4px 8px; font-size: 11px; height: 28px; line-height: 20px; display: inline-flex; align-items: center;">
+                            بله
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( zaminyab_get_option( 'rubika_link' ) ) : ?>
+                        <a href="<?php echo esc_url( zaminyab_get_option( 'rubika_link' ) ); ?>" class="btn-outline" style="padding: 4px 8px; font-size: 11px; height: 28px; line-height: 20px; display: inline-flex; align-items: center;">
+                            روبیکا
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( zaminyab_get_option( 'eitaa_link' ) ) : ?>
+                        <a href="<?php echo esc_url( zaminyab_get_option( 'eitaa_link' ) ); ?>" class="btn-outline" style="padding: 4px 8px; font-size: 11px; height: 28px; line-height: 20px; display: inline-flex; align-items: center;">
+                            ایتا
                         </a>
                     <?php endif; ?>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * ZaminYab Custom Taxonomies
+ * ZaminYab Custom Taxonomies (Expanded with Rent/Mortgage, Residential/Commercial details)
  *
  * @package ZaminYab
  */
@@ -84,7 +84,7 @@ function zaminyab_register_taxonomies() {
     );
     register_taxonomy( 'land_location', array( 'land_listing' ), $args_location );
 
-    // 3. Land Status (وضعیت آگهی - فروشی/معاوضه/فوری/تخفیف‌دار/ویژه)
+    // 3. Land Status (وضعیت آگهی - فروشی/اجاره/رهن/فوری/تخفیف‌دار/ویژه)
     $labels_status = array(
         'name'                       => _x( 'وضعیت آگهی', 'Taxonomy General Name', 'zaminyab' ),
         'singular_name'              => _x( 'وضعیت آگهی', 'Taxonomy Singular Name', 'zaminyab' ),
@@ -209,6 +209,9 @@ function zaminyab_add_default_taxonomy_terms() {
             'زمین سرمایه‌گذاری'
         ),
         'land_status' => array(
+            'فروش',
+            'اجاره',
+            'رهن و اجاره',
             'فروشی',
             'معاوضه',
             'فوری',

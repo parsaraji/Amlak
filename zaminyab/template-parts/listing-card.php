@@ -16,6 +16,10 @@ $area_size   = get_post_meta( $post_id, '_area_size', true );
 $is_featured = get_post_meta( $post_id, '_is_featured', true );
 $is_urgent   = get_post_meta( $post_id, '_is_urgent', true );
 
+// Grab rent metrics
+$rent_rent   = get_post_meta( $post_id, '_rent_monthly', true );
+$rent_deposit= get_post_meta( $post_id, '_rent_deposit', true );
+
 // Land type first term
 $terms_type = get_the_terms( $post_id, 'land_type' );
 $land_type_name = ( ! empty( $terms_type ) ) ? $terms_type[0]->name : 'زمین';
@@ -23,13 +27,17 @@ $land_type_name = ( ! empty( $terms_type ) ) ? $terms_type[0]->name : 'زمین'
 // Location first term (Region / City)
 $terms_loc = get_the_terms( $post_id, 'land_location' );
 $loc_name = ( ! empty( $terms_loc ) ) ? $terms_loc[0]->name : 'نامشخص';
+
+// Status first term (فروش / اجاره)
+$terms_status = get_the_terms( $post_id, 'land_status' );
+$status_name  = ( ! empty( $terms_status ) ) ? $terms_status[0]->name : '';
 ?>
 
 <div class="listing-card">
-    <div class="listing-card-image">
+    <div class="listing-card-image" style="aspect-ratio: 1/1;">
         <a href="<?php the_permalink(); ?>">
             <?php if ( has_post_thumbnail() ) : ?>
-                <?php the_post_thumbnail( 'medium' ); ?>
+                <?php the_post_thumbnail( 'zaminyab-square' ); ?>
             <?php else : ?>
                 <div style="height:100%; display:flex; align-items:center; justify-content:center; background:#fafaf9; color:var(--text-muted);">
                     <?php echo zaminyab_get_svg_icon( 'land', 'large' ); ?>
@@ -42,6 +50,8 @@ $loc_name = ( ! empty( $terms_loc ) ) ? $terms_loc[0]->name : 'نامشخص';
             <span class="listing-badge badge-danger">فوری</span>
         <?php elseif ( $is_featured === '1' ) : ?>
             <span class="listing-badge badge-accent">ویژه</span>
+        <?php elseif ( ! empty($status_name) ) : ?>
+            <span class="listing-badge badge-primary"><?php echo esc_html($status_name); ?></span>
         <?php endif; ?>
 
         <!-- Favorite Toggle button -->
@@ -75,9 +85,18 @@ $loc_name = ( ! empty( $terms_loc ) ) ? $terms_loc[0]->name : 'نامشخص';
 
         <div class="listing-card-footer">
             <div class="listing-card-prices">
-                <div class="listing-card-price"><?php echo zaminyab_format_price( $price_total ); ?></div>
-                <?php if ( ! empty( $price_meter ) ) : ?>
-                    <div class="listing-card-price-per-meter"><?php echo zaminyab_format_price( $price_meter ); ?> هر متر</div>
+                <?php if ( ! empty($rent_deposit) || ! empty($rent_rent) ) : ?>
+                    <div class="listing-card-price" style="font-size: 13px; color: var(--accent-color);">
+                        رهن: <?php echo zaminyab_format_price( $rent_deposit ); ?>
+                    </div>
+                    <div class="listing-card-price-per-meter" style="font-size: 13px; color: var(--secondary-color);">
+                        اجاره: <?php echo zaminyab_format_price( $rent_rent ); ?>
+                    </div>
+                <?php else : ?>
+                    <div class="listing-card-price"><?php echo zaminyab_format_price( $price_total ); ?></div>
+                    <?php if ( ! empty( $price_meter ) ) : ?>
+                        <div class="listing-card-price-per-meter"><?php echo zaminyab_format_price( $price_meter ); ?> هر متر</div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>

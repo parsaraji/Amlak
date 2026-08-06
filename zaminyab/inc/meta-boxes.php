@@ -1,6 +1,6 @@
 <?php
 /**
- * ZaminYab Custom Meta Boxes for land_listing CPT
+ * ZaminYab Custom Meta Boxes for land_listing CPT and Per-Page Code Injection
  *
  * @package ZaminYab
  */
@@ -21,11 +21,51 @@ function zaminyab_register_listing_metaboxes() {
         'normal',
         'high'
     );
+
+    // Register per-post/page custom injection box ONLY for administrators with manage_options
+    if ( current_user_can( 'manage_options' ) ) {
+        $screens = array( 'post', 'page', 'land_listing' );
+        foreach ( $screens as $screen ) {
+            add_meta_box(
+                'zaminyab_page_injection_meta',
+                'تزریق کد سفارشی اختصاصی این صفحه (فقط مدیر ارشد)',
+                'zaminyab_page_injection_meta_callback',
+                $screen,
+                'normal',
+                'low'
+            );
+        }
+    }
 }
 add_action( 'add_meta_boxes', 'zaminyab_register_listing_metaboxes' );
 
 /**
- * Render the meta box callback.
+ * Render custom page/post code injection callback.
+ */
+function zaminyab_page_injection_meta_callback( $post ) {
+    wp_nonce_field( 'zaminyab_save_page_injection_data', 'zaminyab_page_injection_nonce' );
+
+    $custom_css = get_post_meta( $post->ID, '_custom_page_css', true );
+    $custom_js  = get_post_meta( $post->ID, '_custom_page_js', true );
+    ?>
+    <div class="zaminyab-admin-wrap" style="direction: rtl; text-align: right;">
+        <p class="description" style="color: #b45309; margin-bottom: 12px;">کدهای وارد شده در این بخش فقط و فقط در همین صفحه لود و اجرا خواهند شد.</p>
+
+        <div class="zaminyab-metabox-row">
+            <label style="font-weight: bold;" for="custom_page_css">کد CSS اختصاصی این صفحه (بدون تگ style):</label>
+            <textarea id="custom_page_css" name="custom_page_css" rows="5" class="large-text code" style="width:100%; direction: ltr; text-align: left; font-family: monospace;"><?php echo esc_textarea( $custom_page_css ); ?></textarea>
+        </div>
+
+        <div class="zaminyab-metabox-row" style="margin-top: 16px;">
+            <label style="font-weight: bold;" for="custom_page_js">کد جاوا اسکریپت اختصاصی این صفحه (بدون تگ script):</label>
+            <textarea id="custom_page_js" name="custom_page_js" rows="5" class="large-text code" style="width:100%; direction: ltr; text-align: left; font-family: monospace;"><?php echo esc_textarea( $custom_page_js ); ?></textarea>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * Render the main land listing meta box callback.
  */
 function zaminyab_listing_meta_box_callback( $post ) {
     // Add nonce for security
@@ -35,6 +75,9 @@ function zaminyab_listing_meta_box_callback( $post ) {
     $price_total = get_post_meta( $post->ID, '_price_total', true );
     $price_meter = get_post_meta( $post->ID, '_price_meter', true );
     $area_size   = get_post_meta( $post->ID, '_area_size', true );
+
+    $rent_monthly = get_post_meta( $post->ID, '_rent_monthly', true );
+    $rent_deposit = get_post_meta( $post->ID, '_rent_deposit', true );
 
     $seller_name    = get_post_meta( $post->ID, '_seller_name', true );
     $seller_phone   = get_post_meta( $post->ID, '_seller_phone', true );
@@ -59,6 +102,12 @@ function zaminyab_listing_meta_box_callback( $post ) {
     $inside_plan          = get_post_meta( $post->ID, '_inside_plan', true );
     $can_subdivide        = get_post_meta( $post->ID, '_can_subdivide', true );
 
+    // Type-specific inputs (soil, water rights, industrial power, commercial permit)
+    $soil_type            = get_post_meta( $post->ID, '_soil_type', true );
+    $water_rights         = get_post_meta( $post->ID, '_water_rights', true );
+    $industrial_power     = get_post_meta( $post->ID, '_industrial_power', true );
+    $commercial_permit    = get_post_meta( $post->ID, '_commercial_permit', true );
+
     $approx_address       = get_post_meta( $post->ID, '_approx_address', true );
     $latitude             = get_post_meta( $post->ID, '_latitude', true );
     $longitude            = get_post_meta( $post->ID, '_longitude', true );
@@ -72,16 +121,25 @@ function zaminyab_listing_meta_box_callback( $post ) {
 
     ?>
     <div id="zaminyab-meta-box">
-        <!-- 1. Basic price and size -->
+        <!-- 1. Price and metrics -->
         <h3>قیمت و متراژ</h3>
         <div class="zaminyab-metabox-row">
-            <label for="price_total">قیمت کل (تومان):</label>
+            <label for="price_total">قیمت کل (تومان - مخصوص فروش):</label>
             <input type="text" id="price_total" name="price_total" value="<?php echo esc_attr( $price_total ); ?>" class="regular-text">
         </div>
         <div class="zaminyab-metabox-row">
-            <label for="price_meter">قیمت هر متر (تومان):</label>
+            <label for="price_meter">قیمت هر متر (تومان - مخصوص فروش):</label>
             <input type="text" id="price_meter" name="price_meter" value="<?php echo esc_attr( $price_meter ); ?>" class="regular-text">
         </div>
+
+        <div class="zaminyab-metabox-row" style="background: #f0fdf4; padding: 12px; border-radius: 6px; margin: 12px 0;">
+            <label style="color:#166534;" for="rent_deposit">مبلغ ودیعه / رهن (تومان - مخصوص رهن و اجاره):</label>
+            <input type="text" id="rent_deposit" name="rent_deposit" value="<?php echo esc_attr( $rent_deposit ); ?>" class="regular-text">
+
+            <label style="color:#166534; display:block; margin-top:10px;" for="rent_monthly">اجاره ماهیانه (تومان - مخصوص رهن و اجاره):</label>
+            <input type="text" id="rent_monthly" name="rent_monthly" value="<?php echo esc_attr( $rent_monthly ); ?>" class="regular-text">
+        </div>
+
         <div class="zaminyab-metabox-row">
             <label for="area_size">متراژ کل زمین (متر مربع):</label>
             <input type="text" id="area_size" name="area_size" value="<?php echo esc_attr( $area_size ); ?>" class="regular-text">
@@ -131,7 +189,7 @@ function zaminyab_listing_meta_box_callback( $post ) {
         <hr>
 
         <!-- 3. Land Specs -->
-        <h3>ابعاد و امکانات زمین</h3>
+        <h3>ابعاد و ویژگی‌های اختصاصی زمین</h3>
         <div class="zaminyab-metabox-row">
             <label for="land_width">بر زمین (متر):</label>
             <input type="text" id="land_width" name="land_width" value="<?php echo esc_attr( $land_width ); ?>" class="small-text">
@@ -143,6 +201,20 @@ function zaminyab_listing_meta_box_callback( $post ) {
         <div class="zaminyab-metabox-row">
             <label for="land_passage">عرض گذر / کوچه (متر):</label>
             <input type="text" id="land_passage" name="land_passage" value="<?php echo esc_attr( $land_passage ); ?>" class="small-text">
+        </div>
+
+        <div class="zaminyab-metabox-row" style="background:#f8fafc; padding: 12px; border-radius: 6px;">
+            <label style="color:#0f766e;" for="soil_type">نوع خاک (مخصوص کشاورزی/باغ):</label>
+            <input type="text" id="soil_type" name="soil_type" value="<?php echo esc_attr( $soil_type ); ?>" class="regular-text" placeholder="مانند: لومی، شنی، رسی...">
+
+            <label style="color:#0f766e; display:block; margin-top:10px;" for="water_rights">حقابه زراعی (مخصوص کشاورزی/باغ):</label>
+            <input type="text" id="water_rights" name="water_rights" value="<?php echo esc_attr( $water_rights ); ?>" class="regular-text" placeholder="مثال: ۲ ساعت در هفته از چاه عمیق">
+
+            <label style="color:#0f766e; display:block; margin-top:10px;" for="industrial_power">قدرت انشعاب برق (مخصوص صنعتی):</label>
+            <input type="text" id="industrial_power" name="industrial_power" value="<?php echo esc_attr( $industrial_power ); ?>" class="regular-text" placeholder="مثال: ۵۰ کیلووات سه فاز">
+
+            <label style="color:#0f766e; display:block; margin-top:10px;" for="commercial_permit">مجوز ساخت یا پروانه تجاری (مخصوص تجاری):</label>
+            <input type="text" id="commercial_permit" name="commercial_permit" value="<?php echo esc_attr( $commercial_permit ); ?>" class="regular-text" placeholder="مثال: پروانه احداث تجاری اداری ۵ طبقه">
         </div>
 
         <div class="zaminyab-metabox-row">
@@ -188,16 +260,11 @@ function zaminyab_listing_meta_box_callback( $post ) {
 
         <hr>
 
-        <!-- 5. Media & Promotional -->
+        <!-- 5. Promotional -->
         <h3>رسانه و تبلیغ</h3>
-        <div class="zaminyab-metabox-row">
-            <label for="video_url">آدرس ویدیو آگهی (آپارات/یوتیوب):</label>
-            <input type="text" id="video_url" name="video_url" value="<?php echo esc_attr( $video_url ); ?>" class="regular-text">
-        </div>
         <div class="zaminyab-metabox-row">
             <label for="gallery_images">شناسه‌های گالری تصاویر (جدا شده با کاما):</label>
             <input type="text" id="gallery_images" name="gallery_images" value="<?php echo esc_attr( $gallery_images ); ?>" class="regular-text">
-            <p class="description">آی‌دی‌های تصاویر پیوست شده به این پست (مانند: 12,45,67)</p>
         </div>
 
         <hr>
@@ -252,6 +319,8 @@ function zaminyab_save_listing_meta( $post_id ) {
     $fields = array(
         'price_total'        => '_price_total',
         'price_meter'        => '_price_meter',
+        'rent_monthly'       => '_rent_monthly',
+        'rent_deposit'       => '_rent_deposit',
         'area_size'          => '_area_size',
         'seller_name'        => '_seller_name',
         'seller_phone'       => '_seller_phone',
@@ -262,6 +331,10 @@ function zaminyab_save_listing_meta( $post_id ) {
         'land_width'         => '_land_width',
         'land_length'        => '_land_length',
         'land_passage'       => '_land_passage',
+        'soil_type'          => '_soil_type',
+        'water_rights'       => '_water_rights',
+        'industrial_power'   => '_industrial_power',
+        'commercial_permit'  => '_commercial_permit',
         'approx_address'     => '_approx_address',
         'latitude'           => '_latitude',
         'longitude'          => '_longitude',
@@ -299,3 +372,34 @@ function zaminyab_save_listing_meta( $post_id ) {
     }
 }
 add_action( 'save_post', 'zaminyab_save_listing_meta' );
+
+/**
+ * Save page custom injection data (Only allow Administrators with manage_options to edit or save these fields to prevent XSS).
+ */
+function zaminyab_save_page_injection_meta( $post_id ) {
+    if ( ! isset( $_POST['zaminyab_page_injection_nonce'] ) ) {
+        return;
+    }
+
+    if ( ! wp_verify_nonce( $_POST['zaminyab_page_injection_nonce'], 'zaminyab_save_page_injection_data' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // STRICT PERMISSION CHECK FOR XSS PREVENTION
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    if ( isset( $_POST['custom_page_css'] ) ) {
+        update_post_meta( $post_id, '_custom_page_css', sanitize_textarea_field( $_POST['custom_page_css'] ) );
+    }
+
+    if ( isset( $_POST['custom_page_js'] ) ) {
+        update_post_meta( $post_id, '_custom_page_js', sanitize_textarea_field( $_POST['custom_page_js'] ) );
+    }
+}
+add_action( 'save_post', 'zaminyab_save_page_injection_meta' );
