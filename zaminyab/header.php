@@ -12,18 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 <html <?php language_attributes(); ?> dir="rtl">
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<div id="page" class="site">
+<div id="page" class="site" style="width: 100%; min-height: 100vh; display: flex; flex-direction: column;">
     <a class="skip-link screen-reader-text" href="#primary" style="display:none;"><?php esc_html_e( 'پرش به محتوا', 'zaminyab' ); ?></a>
 
-    <!-- Sticky Header -->
-    <header class="site-header">
-        <div class="container header-container">
+    <!-- Full-Width Sticky Header -->
+    <header class="site-header" style="width: 100%;">
+        <div class="container header-container" style="width: 100%; max-width: var(--container-width); margin: 0 auto; padding: 0 16px;">
             <!-- Hamburger menu for mobile -->
             <button class="mobile-hamburger" aria-label="منوی ناوبری" aria-expanded="false" onclick="toggleMobileSidebar()">
                 <?php echo zaminyab_get_svg_icon( 'menu' ); ?>
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <?php
                     $logo = zaminyab_get_option( 'logo_url' );
                     if ( ! empty( $logo ) ) : ?>
-                        <img src="<?php echo esc_url( $logo ); ?>" alt="<?php bloginfo( 'name' ); ?>">
+                        <img src="<?php echo esc_url( $logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height: 32px; width: auto; object-fit: contain;">
                     <?php else : ?>
                         <?php echo zaminyab_get_svg_icon( 'land' ); ?>
                         <span><?php bloginfo( 'name' ); ?></span>
@@ -58,17 +58,17 @@ if ( ! defined( 'ABSPATH' ) ) {
             <!-- Actions buttons -->
             <div class="header-actions">
                 <?php if ( is_user_logged_in() ) : ?>
-                    <a href="<?php echo esc_url( home_url( '/dashboard/' ) ); ?>" class="btn-outline" style="padding: 6px 12px; border-radius: 6px; font-size: 13px;">
+                    <a href="<?php echo esc_url( home_url( '/dashboard/' ) ); ?>" class="btn-outline">
                         <?php echo zaminyab_get_svg_icon( 'user' ); ?> پنل کاربری
                     </a>
                 <?php else : ?>
-                    <a href="<?php echo esc_url( wp_login_url() ); ?>" class="btn-muted" style="padding: 6px 12px; border-radius: 6px; font-size: 13px;">
+                    <a href="<?php echo esc_url( wp_login_url() ); ?>" class="btn-muted">
                         <?php echo zaminyab_get_svg_icon( 'user' ); ?> ورود / ثبت نام
                     </a>
                 <?php endif; ?>
 
-                <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold;">
-                    <?php echo zaminyab_get_svg_icon( 'plus' ); ?> ثبت آگهی زمین
+                <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary">
+                    <?php echo zaminyab_get_svg_icon( 'plus' ); ?> ثبت آگهی
                 </a>
             </div>
         </div>

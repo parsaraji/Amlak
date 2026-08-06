@@ -749,7 +749,7 @@ button:hover {
     height: 20px;
 }
 
-/* Section Title */
+/* Section Title with elegant right border, padding & spacing */
 .section-header {
     display: flex;
     align-items: center;
@@ -758,22 +758,12 @@ button:hover {
 }
 
 .section-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     color: var(--text-color);
-    position: relative;
-    padding-right: 10px;
-}
-
-.section-title::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 4px;
-    bottom: 4px;
-    width: 3px;
-    background-color: var(--primary-color);
-    border-radius: 2px;
+    border-right: 4px solid var(--primary-color); /* Beautiful native RTL border */
+    padding-right: 12px; /* Perfect spacing */
+    margin: 24px 0 16px;
 }
 
 /* Search Filters Form (Beautiful, compact 2-column inline grid for checkboxes) */

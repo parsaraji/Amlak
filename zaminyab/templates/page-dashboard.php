@@ -9,6 +9,31 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Ensure user is logged in
+if ( ! is_user_logged_in() ) {
+    wp_redirect( wp_login_url() );
+    exit;
+}
+
+$user_id = get_current_user_id();
+
+// Handle Frontend Secure Deletion
+if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['id'] ) ) {
+    $delete_id = intval( $_GET['id'] );
+
+    // Verify security nonce
+    if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'delete_listing_' . $delete_id ) ) {
+        $post_to_delete = get_post( $delete_id );
+
+        // Ownership verification
+        if ( $post_to_delete && intval( $post_to_delete->post_author ) === $user_id ) {
+            wp_trash_post( $delete_id );
+            wp_redirect( add_query_arg( 'deleted', '1', remove_query_arg( array( 'action', 'id', '_wpnonce' ) ) ) );
+            exit;
+        }
+    }
+}
+
 get_header(); ?>
 
 <!-- Breadcrumbs -->
@@ -18,93 +43,14 @@ get_header(); ?>
     <div style="margin: 40px 0;">
         <h1 style="font-size:24px; font-weight:bold; margin-bottom:24px;">داشبورد آگهی‌های من</h1>
 
-        <div class="dashboard-container">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:16px;">
-                <h2 style="font-size:16px; font-weight:bold; margin:0;">لیست زمین‌های واگذار شده و آگهی شده توسط شما</h2>
-                <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary" style="padding:6px 12px; font-size:13px;">+ ثبت آگهی جدید</a>
+        <!-- Feedback messages -->
+        <?php if ( isset($_GET['deleted']) && $_GET['deleted'] === '1' ) : ?>
+            <div class="zaminyab-warning-box" style="background-color:#f0fdf4; border-right:4px solid #16a34a; color:#15803d; margin-bottom:24px;">
+                آگهی زمین مورد نظر با موفقیت حذف گردید و به زباله‌دان انتقال یافت.
             </div>
+        <?php endif; ?>
 
-            <?php
-            // Fetch current user posts
-            $user_id = get_current_user_id();
-            $query = new WP_Query( array(
-                'post_type'   => 'land_listing',
-                'post_status' => array( 'publish', 'pending', 'draft' ),
-                'author'      => $user_id,
-                'posts_per_page' => -1,
-            ) );
-
-            if ( $query->have_posts() ) : ?>
-                <div class="dashboard-table-wrapper">
-                    <table class="dashboard-table">
-                        <thead>
-                            <tr>
-                                <th>تصویر</th>
-                                <th>عنوان آگهی</th>
-                                <th>نوع زمین</th>
-                                <th>قیمت کل</th>
-                                <th>وضعیت انتشار</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ( $query->have_posts() ) : $query->the_post();
-                                $post_id = get_the_ID();
-                                $price = get_post_meta( $post_id, '_price_total', true );
-                                $status = get_post_status( $post_id );
-
-                                $status_label = 'پیش‌نویس';
-                                $status_class = 'badge-secondary';
-                                if ( $status === 'publish' ) {
-                                    $status_label = 'منتشر شده';
-                                    $status_class = 'badge-primary';
-                                } elseif ( $status === 'pending' ) {
-                                    $status_label = 'در انتظار بررسی';
-                                    $status_class = 'badge-accent';
-                                }
-                                ?>
-                                <tr>
-                                    <td>
-                                        <div style="width:60px; height:40px; border-radius:4px; overflow:hidden;">
-                                            <?php if ( has_post_thumbnail() ) : ?>
-                                                <?php the_post_thumbnail('thumbnail', array('style'=>'width:100%;height:100%;object-fit:cover;')); ?>
-                                            <?php else: ?>
-                                                <div style="background:#eee; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">-</div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                    <td><strong><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></strong></td>
-                                    <td>
-                                        <?php
-                                        $terms = get_the_terms( $post_id, 'land_type' );
-                                        echo ( ! empty($terms) ) ? esc_html($terms[0]->name) : 'زمین مسکونی';
-                                        ?>
-                                    </td>
-                                    <td><?php echo zaminyab_format_price( $price ); ?></td>
-                                    <td>
-                                        <span class="listing-badge <?php echo esc_attr($status_class); ?>" style="position:static; padding:2px 8px; font-size:11px;">
-                                            <?php echo esc_html($status_label); ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display:flex; gap:8px;">
-                                            <a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>" class="btn-outline" style="padding:4px 8px; font-size:12px; border-radius:4px;">ویرایش</a>
-                                            <a href="<?php echo esc_url( get_delete_post_link( $post_id ) ); ?>" class="btn-muted" onclick="return confirm('آیا از حذف این آگهی اطمینان کامل دارید؟')" style="padding:4px 8px; font-size:12px; border-radius:4px; color:#ef4444;">حذف</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <?php wp_reset_postdata(); ?>
-            <?php else : ?>
-                <div style="text-align:center; padding:40px;">
-                    <p style="color:var(--text-muted); margin-bottom:16px;">شما هنوز هیچ آگهی زمین ثبت نکرده‌اید.</p>
-                    <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary">ثبت اولین آگهی زمین</a>
-                </div>
-            <?php endif; ?>
-        </div>
+        <?php get_template_part( 'template-parts/dashboard-content' ); ?>
     </div>
 </main>
 

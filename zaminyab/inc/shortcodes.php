@@ -20,7 +20,7 @@ add_shortcode( 'zaminyab_search', 'zaminyab_search_shortcode' );
 // 2. Frontend submission form [zaminyab_submit_listing]
 function zaminyab_submit_listing_shortcode() {
     ob_start();
-    get_template_part( 'templates/page-submit-listing' );
+    get_template_part( 'template-parts/form-submit-listing' );
     return ob_get_clean();
 }
 add_shortcode( 'zaminyab_submit_listing', 'zaminyab_submit_listing_shortcode' );
@@ -97,7 +97,7 @@ function zaminyab_user_dashboard_shortcode() {
     }
 
     ob_start();
-    get_template_part( 'templates/page-dashboard' );
+    get_template_part( 'template-parts/dashboard-content' );
     return ob_get_clean();
 }
 add_shortcode( 'zaminyab_user_dashboard', 'zaminyab_user_dashboard_shortcode' );
@@ -105,7 +105,7 @@ add_shortcode( 'zaminyab_user_dashboard', 'zaminyab_user_dashboard_shortcode' );
 // 6. Favorites page [zaminyab_favorites]
 function zaminyab_favorites_shortcode() {
     ob_start();
-    get_template_part( 'templates/page-favorites' );
+    get_template_part( 'template-parts/favorites-content' );
     return ob_get_clean();
 }
 add_shortcode( 'zaminyab_favorites', 'zaminyab_favorites_shortcode' );

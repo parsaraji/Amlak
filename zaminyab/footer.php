@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-    <footer class="site-footer">
-        <div class="container footer-grid">
+    <!-- Full-Width Footer -->
+    <footer class="site-footer" style="width: 100%;">
+        <div class="container footer-grid" style="width: 100%; max-width: var(--container-width); margin: 0 auto; padding: 0 16px;">
             <!-- Widget 1: About site -->
             <div class="footer-widget">
                 <h4 class="footer-widget-title">درباره زمین‌یاب</h4>
