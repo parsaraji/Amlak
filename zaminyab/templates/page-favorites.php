@@ -15,7 +15,9 @@ get_header(); ?>
 <?php zaminyab_breadcrumbs(); ?>
 
 <main id="primary" class="site-main container">
-    <?php get_template_part( 'template-parts/favorites-content' ); ?>
+    <div class="zaminyab-page-card">
+        <?php get_template_part( 'template-parts/favorites-content' ); ?>
+    </div>
 </main>
 
 <?php get_footer(); ?>

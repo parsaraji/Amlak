@@ -15,10 +15,10 @@ get_header(); ?>
 <?php zaminyab_breadcrumbs(); ?>
 
 <main id="primary" class="site-main container">
-    <article class="page-card" style="background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:32px; margin-top:20px; margin-bottom:40px;">
-        <h1 style="font-size:24px; font-weight:bold; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:12px;">قوانین و ضوابط ثبت آگهی زمین</h1>
+    <article class="zaminyab-page-card">
+        <h1 style="font-size:20px; font-weight:bold; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:12px;">قوانین و ضوابط ثبت آگهی زمین</h1>
 
-        <div class="entry-content text-justify" style="font-size:15px; color:var(--text-color); line-height:1.8;">
+        <div class="entry-content text-justify" style="font-size:14px; color:var(--text-color); line-height:1.8;">
             <p>
                 جهت حفظ کیفیت سامانه زمین‌یاب و پیشگیری از هرگونه کلاهبرداری یا سوءاستفاده احتمالی، تمامی کاربران و آگهی‌دهندگان محترم موظف به رعایت کامل قوانین زیر می‌باشند:
             </p>

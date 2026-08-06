@@ -15,10 +15,10 @@ get_header(); ?>
 <?php zaminyab_breadcrumbs(); ?>
 
 <main id="primary" class="site-main container">
-    <article class="page-card" style="background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:32px; margin-top:20px; margin-bottom:40px;">
-        <h1 style="font-size:24px; font-weight:bold; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:12px;">درباره پلتفرم زمین‌یاب</h1>
+    <article class="zaminyab-page-card">
+        <h1 style="font-size:20px; font-weight:bold; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:12px;">درباره پلتفرم زمین‌یاب</h1>
 
-        <div class="entry-content text-justify" style="font-size:15px; color:var(--text-color); line-height:1.8;">
+        <div class="entry-content text-justify" style="font-size:14px; color:var(--text-color); line-height:1.8;">
             <p>
                 سامانه بزرگ و بومی <strong>زمین‌یاب</strong> با هدف تسهیل، شفاف‌سازی و حذف واسطه‌های نامعتبر در حوزه خرید، فروش و معاوضه اراضی سراسر کشور تاسیس گردیده است. ما متوجه شدیم که وب‌سایت‌های عمومی ثبت نیازمندی‌ها، فاقد ساختار فنی و تخصصی لازم جهت بررسی معیارهای کلیدی یک زمین (از قبیل نوع سند، نوع کاربری، انشعابات، ابعاد دقیق گذر و موقعیت تقریبی حریم خصوصی) هستند.
             </p>

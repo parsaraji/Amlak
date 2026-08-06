@@ -16,18 +16,18 @@ $edit_success    = isset( $_GET['edit_success'] ) && $_GET['edit_success'] === '
 if ( $success_post_id || $edit_success ) {
     get_header(); ?>
     <main id="primary" class="site-main container">
-        <div style="max-width: 600px; margin: 80px auto; text-align: center; background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 48px 32px; box-shadow: var(--shadow-sm);">
+        <div class="zaminyab-page-card" style="max-width: 600px; margin: 40px auto; text-align: center;">
             <div style="width: 64px; height: 64px; background-color: #f0fdf4; color: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
                 <?php echo zaminyab_get_svg_icon( 'check' ); ?>
             </div>
 
             <?php if ( $edit_success ) : ?>
-                <h1 style="font-size: 22px; font-weight: bold; margin-bottom: 16px; color: var(--text-color);">بروزرسانی با موفقیت انجام شد!</h1>
+                <h1 style="font-size: 20px; font-weight: bold; margin-bottom: 16px; color: var(--text-color);">بروزرسانی با موفقیت انجام شد!</h1>
                 <p class="text-justify" style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">
                     تغییرات شما در آگهی زمین ذخیره گردید و پس از تایید مدیر روی وب‌سایت نمایش داده خواهد شد.
                 </p>
             <?php else : ?>
-                <h1 style="font-size: 22px; font-weight: bold; margin-bottom: 16px; color: var(--text-color);">آگهی شما با موفقیت ثبت شد!</h1>
+                <h1 style="font-size: 20px; font-weight: bold; margin-bottom: 16px; color: var(--text-color);">آگهی شما با موفقیت ثبت شد!</h1>
                 <p class="text-justify" style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">
                     با تشکر از شما، آگهی زمین شما با موفقیت ثبت گردید. آگهی شما پس از بررسی و تایید کارشناسان در کوتاه‌ترین زمان روی وب‌سایت منتشر خواهد شد.
                 </p>
@@ -54,6 +54,8 @@ get_header(); ?>
 <?php zaminyab_breadcrumbs(); ?>
 
 <main id="primary" class="site-main container">
-    <?php get_template_part( 'template-parts/form-submit-listing' ); ?>
+    <div class="zaminyab-page-card">
+        <?php get_template_part( 'template-parts/form-submit-listing' ); ?>
+    </div>
 </main>
 <?php get_footer(); ?>

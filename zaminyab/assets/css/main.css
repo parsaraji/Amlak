@@ -197,6 +197,23 @@ button:hover {
     text-justify: inter-word;
 }
 
+/* Standardized Page Layout container class for 100% aesthetic uniformity */
+.zaminyab-page-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0 40px;
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 767px) {
+    .zaminyab-page-card {
+        padding: 16px;
+        margin: 16px 0 32px;
+    }
+}
+
 /* Layout Header/Footer Styles (Sticky Header & Sticky Bottom Nav) */
 .site-header {
     background-color: #fff;
