@@ -17,8 +17,8 @@ $user_id = get_current_user_id();
 ?>
 <div class="dashboard-container">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:16px;">
-        <h2 style="font-size:16px; font-weight:bold; margin:0;">لیست زمین‌های واگذار شده و آگهی شده توسط شما</h2>
-        <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary" style="padding:6px 12px; font-size:13px;">+ ثبت آگهی جدید</a>
+        <h2 style="font-size:15px; font-weight:bold; margin:0;">لیست زمین‌های واگذار شده و آگهی شده توسط شما</h2>
+        <a href="<?php echo esc_url( home_url( '/submit-listing/' ) ); ?>" class="btn-primary" style="padding:6px 12px; font-size:12px; height: 32px;">+ ثبت آگهی جدید</a>
     </div>
 
     <?php
@@ -37,7 +37,7 @@ $user_id = get_current_user_id();
                     <tr>
                         <th>تصویر</th>
                         <th>عنوان آگهی</th>
-                        <th>نوع زمین</th>
+                        <th>نوع ملک/زمین</th>
                         <th>قیمت کل</th>
                         <th>وضعیت انتشار</th>
                         <th>عملیات</th>
@@ -65,11 +65,11 @@ $user_id = get_current_user_id();
                             'delete_listing_' . $post_id
                         );
 
-                        // Create frontend edit link (pointing to the submit-listing template with an edit_id parameter)
+                        // Create edit link
                         $edit_url = add_query_arg( array( 'edit_id' => $post_id ), home_url( '/submit-listing/' ) );
                         ?>
                         <tr>
-                            <td>
+                            <td data-label="تصویر">
                                 <div style="width:60px; height:40px; border-radius:4px; overflow:hidden;">
                                     <?php if ( has_post_thumbnail() ) : ?>
                                         <?php the_post_thumbnail('thumbnail', array('style'=>'width:100%;height:100%;object-fit:cover;')); ?>
@@ -78,23 +78,23 @@ $user_id = get_current_user_id();
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td><strong><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></strong></td>
-                            <td>
+                            <td data-label="عنوان آگهی"><strong><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></strong></td>
+                            <td data-label="نوع ملک/زمین">
                                 <?php
                                 $terms = get_the_terms( $post_id, 'land_type' );
                                 echo ( ! empty($terms) ) ? esc_html($terms[0]->name) : 'زمین مسکونی';
                                 ?>
                             </td>
-                            <td><?php echo zaminyab_format_price( $price ); ?></td>
-                            <td>
+                            <td data-label="قیمت کل"><?php echo zaminyab_format_price( $price ); ?></td>
+                            <td data-label="وضعیت انتشار">
                                 <span class="listing-badge <?php echo esc_attr($status_class); ?>" style="position:static; padding:2px 8px; font-size:11px;">
                                     <?php echo esc_html($status_label); ?>
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="عملیات">
                                 <div style="display:flex; gap:8px;">
-                                    <a href="<?php echo esc_url( $edit_url ); ?>" class="btn-outline" style="padding:4px 8px; font-size:12px; border-radius:4px;">ویرایش</a>
-                                    <a href="<?php echo esc_url( $delete_url ); ?>" class="btn-muted" onclick="return confirm('آیا از حذف این آگهی اطمینان کامل دارید؟')" style="padding:4px 8px; font-size:12px; border-radius:4px; color:#ef4444;">حذف</a>
+                                    <a href="<?php echo esc_url( $edit_url ); ?>" class="btn-outline" style="padding:4px 8px; font-size:12px; border-radius:4px; height:28px; line-height:18px;">ویرایش</a>
+                                    <a href="<?php echo esc_url( $delete_url ); ?>" class="btn-muted" onclick="return confirm('آیا از حذف این آگهی اطمینان کامل دارید؟')" style="padding:4px 8px; font-size:12px; border-radius:4px; color:#ef4444; height:28px; line-height:18px;">حذف</a>
                                 </div>
                             </td>
                         </tr>

@@ -1,6 +1,6 @@
 <?php
 /**
- * ZaminYab Custom Taxonomies (Expanded with Rent/Mortgage, Residential/Commercial details)
+ * ZaminYab Custom Taxonomies (Expanded with Rent/Mortgage, Residential/Commercial details and Default seeded Locations)
  *
  * @package ZaminYab
  */
@@ -241,6 +241,32 @@ function zaminyab_add_default_taxonomy_terms() {
         foreach ( $terms as $term ) {
             if ( ! term_exists( $term, $tax ) ) {
                 wp_insert_term( $term, $tax );
+            }
+        }
+    }
+
+    // Seed hierarchical locations (Provinces & Cities)
+    $locations_seeding = array(
+        'تهران' => array( 'دماوند', 'لواسان', 'رودهن', 'بومهن' ),
+        'مازندران' => array( 'کلاردشت', 'رامسر', 'چالوس', 'نوشهر' ),
+        'گیلان' => array( 'لاهیجان', 'رشت', 'بندرانزلی' ),
+        'اصفهان' => array( 'کاشان', 'شاهین‌شهر' ),
+        'فارس' => array( 'شیراز', 'مرودشت' )
+    );
+
+    foreach ( $locations_seeding as $province => $cities ) {
+        $parent_term = term_exists( $province, 'land_location' );
+        if ( ! $parent_term ) {
+            $parent_term = wp_insert_term( $province, 'land_location' );
+        }
+
+        $parent_id = is_array( $parent_term ) ? $parent_term['term_id'] : intval( $parent_term );
+
+        if ( $parent_id ) {
+            foreach ( $cities as $city ) {
+                if ( ! term_exists( $city, 'land_location' ) ) {
+                    wp_insert_term( $city, 'land_location', array( 'parent' => $parent_id ) );
+                }
             }
         }
     }

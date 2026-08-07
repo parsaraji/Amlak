@@ -69,7 +69,7 @@ get_header(); ?>
                     </div>
 
                     <div style="display:flex; flex-wrap:wrap; gap:12px; font-size:11px; color:var(--text-muted); margin-bottom:16px;">
-                        <span>ثبت در تاریخ: <?php echo get_the_date(); ?></span>
+                        <span>ثبت در تاریخ: <?php echo zaminyab_get_jalali_date(); ?></span>
                         <span>•</span>
                         <span>شناسه آگهی: <?php echo zaminyab_to_persian_digits($post_id); ?></span>
                     </div>
@@ -111,8 +111,8 @@ get_header(); ?>
                 </div>
 
                 <!-- 2. Interactive Image Slider/Carousel Gallery Block -->
-                <div class="single-listing-gallery" style="margin-bottom: 20px; background-color: #1c1917; position: relative; border-radius: 12px; overflow: hidden;">
-                    <div class="gallery-slider-container" style="position: relative; aspect-ratio: 16/10; display: flex; align-items: center; overflow: hidden;">
+                <div class="single-listing-gallery" style="margin-bottom: 20px; background-color: #1c1917; position: relative; border-radius: 12px; overflow: hidden; direction: ltr !important;">
+                    <div class="gallery-slider-container" style="position: relative; aspect-ratio: 16/10; display: flex; align-items: center; overflow: hidden; direction: ltr !important;">
 
                         <!-- Track for slides -->
                         <div id="zaminyabGalleryTrack" style="display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-out;">

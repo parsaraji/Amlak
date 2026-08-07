@@ -1,6 +1,6 @@
 <?php
 /**
- * ZaminYab Helper functions (Currency, Formatting, AJAX)
+ * ZaminYab Helper functions (Currency, Formatting, AJAX, Gregorian-to-Jalali Converter)
  *
  * @package ZaminYab
  */
@@ -42,6 +42,79 @@ function zaminyab_format_area( $area ) {
 }
 
 /**
+ * Convert Gregorian date to Jalali (Solar Hijri) date string.
+ *
+ * @param int $g_y Year
+ * @param int $g_m Month
+ * @param int $g_d Day
+ * @return string Jalali date like "۱۴۰۲/۰۵/۱۵"
+ */
+function zaminyab_gregorian_to_jalali( $g_y, $g_m, $g_d ) {
+    $g_days_in_month = array( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+    $j_days_in_month = array( 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 );
+
+    $gy = $g_y - 1600;
+    $gm = $g_m - 1;
+    $gd = $g_d - 1;
+
+    $g_day_no = 365 * $gy + floor( ( $gy + 3 ) / 4 ) - floor( ( $gy + 99 ) / 100 ) + floor( ( $gy + 399 ) / 400 );
+
+    for ( $i = 0; $i < $gm; ++$i ) {
+        $g_day_no += $g_days_in_month[ $i ];
+    }
+    if ( $gm > 1 && ( ( $g_y % 4 == 0 && $g_y % 100 != 0 ) || ( $g_y % 400 == 0 ) ) ) {
+        $g_day_no++;
+    }
+    $g_day_no += $gd;
+
+    $j_day_no = $g_day_no - 79;
+
+    $j_np = floor( $j_day_no / 12053 );
+    $j_day_no %= 12053;
+
+    $jy = 979 + 33 * $j_np + 4 * floor( $j_day_no / 1461 );
+    $j_day_no %= 1461;
+
+    if ( $j_day_no >= 366 ) {
+        $jy += floor( ( $j_day_no - 1 ) / 365 );
+        $j_day_no = ( $j_day_no - 1 ) % 365;
+    }
+
+    for ( $i = 0; $i < 11 && $j_day_no >= $j_days_in_month[ $i ]; ++$i ) {
+        $j_day_no -= $j_days_in_month[ $i ];
+    }
+    $jm = $i + 1;
+    $jd = $j_day_no + 1;
+
+    // Formatting month & day with leading zeros
+    $jm_str = ( $jm < 10 ) ? '۰' . $jm : $jm;
+    $jd_str = ( $jd < 10 ) ? '۰' . $jd : $jd;
+
+    $jy_str = zaminyab_to_persian_digits( $jy );
+    $jm_str = zaminyab_to_persian_digits( $jm_str );
+    $jd_str = zaminyab_to_persian_digits( $jd_str );
+
+    return $jy_str . '/' . $jm_str . '/' . $jd_str;
+}
+
+/**
+ * Returns the formatted Jalali date of a post.
+ */
+function zaminyab_get_jalali_date( $post_id = 0 ) {
+    $post = get_post( $post_id );
+    if ( ! $post ) {
+        return '';
+    }
+
+    $time = strtotime( $post->post_date );
+    $y = date( 'Y', $time );
+    $m = date( 'n', $time );
+    $d = date( 'j', $time );
+
+    return zaminyab_gregorian_to_jalali( $y, $m, $d );
+}
+
+/**
  * Favorite Listing Toggle AJAX handler.
  */
 function zaminyab_toggle_favorite_ajax() {
@@ -73,7 +146,6 @@ function zaminyab_toggle_favorite_ajax() {
         update_user_meta( $user_id, '_zaminyab_favorites', $favorites );
         wp_send_json_success( array( 'status' => $status, 'message' => $msg ) );
     } else {
-        // Fallback or instructions to use localStorage in front-end JS
         wp_send_json_success( array( 'status' => 'guest_handled', 'message' => 'مهمان: در مرورگر شما ذخیره شد.' ) );
     }
 }
